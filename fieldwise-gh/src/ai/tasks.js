@@ -55,7 +55,7 @@ export async function analyzePhotoAI(provider, image, { hint = '', context = nul
     '"vegetationCondition":"poor|fair|good|excellent|unknown","slope":"flat|gentle|moderate|steep|unknown",',
     '"drainage":"well|moderate|poor|unknown","erosionSigns":boolean,"standingWater":boolean,',
     '"weeds":[{"name":string,"severity":"light|moderate|heavy"}],"observations":[string],"confidence":"low|medium|high"}.',
-    'landCover percentages should add to 100. Only name weeds you can actually identify; otherwise leave the list empty.',
+    'landCover percentages should add to 100. Only name weeds you can actually identify; otherwise make another section with remaining percentage "other".',
     'If you cannot judge slope or drainage from a photo, answer "unknown".',
     hint ? `The user says: ${wrap({ hint: String(hint).slice(0, 300) })}` : '',
     context ? `Context: ${wrap(context)}` : '',
@@ -67,7 +67,7 @@ export async function analyzePhotoAI(provider, image, { hint = '', context = nul
 export async function generateLessonAI(provider, context, topic) {
   if (!QUIZ_TOPICS.includes(topic)) throw new Error('Unknown lesson topic');
   const prompt = [
-    `Write a short lesson about "${topic}" for THIS farm, using the actual numbers below.`,
+    `Write a short lesson about "${topic}" for this farm, using the actual numbers below.`,
     'Explain what the number means, the benefits AND the limitations it brings for livestock and crops, and what to do next.',
     'Return JSON: {"title":string,"sections":[{"heading":string,"body":string}],"takeaways":[string]}. 3-5 sections, each body under 900 characters.',
     wrap(context),
@@ -78,9 +78,9 @@ export async function generateLessonAI(provider, context, topic) {
 export async function generateQuizAI(provider, context, { count = 8, topics = null, difficulty = 'advanced', variation = Math.floor(Math.random() * 1e9) } = {}) {
   const chosenTopics = (topics || QUIZ_TOPICS).filter((t) => QUIZ_TOPICS.includes(t));
   const prompt = [
-    `Write ${Math.min(Math.max(count, 3), 12)} multiple-choice questions personalized to THIS farm's actual numbers.`,
+    `Write ${Math.min(Math.max(count, 3), 12)} multiple-choice questions personalized to this farm's actual numbers.`,
     `Difficulty: ${difficulty}. Topics to draw from: ${chosenTopics.join(', ')}.`,
-    'Include BOTH kinds of question for the farm\'s own values: "benefit" (what is good about this value, e.g. what a high pH does well) and "limitation" (what problem it causes and how to manage it).',
+    'Include both kinds of question for the farm\'s own values: "benefit" (what is good about this value, e.g. what a high pH does well) and "limitation" (what problem it causes and how to manage it).',
     'Include a few "calculation" questions that use the farm\'s numbers. Each question has exactly 4 distinct options and one correct answer.',
     'Return JSON: {"questions":[{"prompt":string,"options":[string,string,string,string],"correctIndex":0-3,"explanation":string,"topic":string,"kind":"benefit|limitation|calculation|concept","difficulty":"basic|advanced"}]}.',
     'Do not put the correct answer in a predictable position. Explanations must teach, in one to three sentences.',
