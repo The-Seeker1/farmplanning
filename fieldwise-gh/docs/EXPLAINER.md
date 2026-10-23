@@ -1,7 +1,4 @@
-# How FieldWise works (in plain language)
-
-This is the guide to read before you present the project. Every idea here points to the file where it lives, so you can
-open the code and see it. If you cannot explain a part, read that file until you can; judges and teachers may ask.
+# How FieldWise works 
 
 ## The big picture
 
